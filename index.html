@@ -1,0 +1,2703 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduVibe — Audio & Text Micro-Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0d0d14;
+        --ink-soft: #3a3a4a;
+        --ink-muted: #7a7a8c;
+        --surface: #f7f5f0;
+        --surface-alt: #eeecf5;
+        --white: #ffffff;
+        --accent: #5b3af5;
+        --accent-light: #ede9ff;
+        --accent-mid: #8165f8;
+        --gold: #e8a020;
+        --gold-light: #fff4dc;
+        --teal: #0eb89a;
+        --teal-light: #d4f7f2;
+        --coral: #f04e60;
+        --coral-light: #fde8ea;
+        --border: rgba(13, 13, 20, 0.09);
+        --r: 14px;
+        --r-sm: 8px;
+        --r-lg: 24px;
+        --r-pill: 999px;
+        --shadow: 0 2px 18px rgba(13, 13, 20, 0.08);
+        --shadow-lg: 0 8px 48px rgba(13, 13, 20, 0.14);
+        --nav-h: 68px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--surface);
+        color: var(--ink);
+        line-height: 1.65;
+        overflow-x: hidden;
+      }
+
+      /* ─── NOISE OVERLAY ─── */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0.4;
+      }
+
+      /* ─── TYPOGRAPHY ─── */
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Syne", sans-serif;
+        line-height: 1.15;
+      }
+      h1 {
+        font-size: clamp(2.6rem, 6vw, 5rem);
+        font-weight: 800;
+      }
+      h2 {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 700;
+      }
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+      p {
+        font-size: 1rem;
+        color: var(--ink-soft);
+        font-weight: 300;
+      }
+      code,
+      .mono {
+        font-family: "DM Mono", monospace;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      /* ─── NAV ─── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-h);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(1.5rem, 5vw, 4rem);
+        background: rgba(247, 245, 240, 0.85);
+        backdrop-filter: blur(16px) saturate(1.5);
+        border-bottom: 1px solid var(--border);
+        z-index: 900;
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-mark {
+        width: 38px;
+        height: 38px;
+        background: var(--accent);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .logo-mark::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 3px;
+        background: white;
+        border-radius: 2px;
+        box-shadow:
+          0 6px 0 white,
+          0 -6px 0 white;
+        animation: pulse-bars 1.4s ease-in-out infinite alternate;
+      }
+      @keyframes pulse-bars {
+        from {
+          transform: scaleX(1);
+        }
+        to {
+          transform: scaleX(0.6);
+        }
+      }
+
+      .logo-text {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.2rem;
+        letter-spacing: -0.02em;
+      }
+      .logo-text span {
+        color: var(--accent);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        font-size: 0.9rem;
+        font-weight: 400;
+      }
+      .nav-links a {
+        color: var(--ink-soft);
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-cta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 22px;
+        border-radius: var(--r-pill);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all 0.22s;
+        white-space: nowrap;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--ink-soft);
+        border: 1px solid var(--border);
+      }
+      .btn-ghost:hover {
+        background: var(--white);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #4829d8;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(91, 58, 245, 0.35);
+      }
+      .btn-gold {
+        background: var(--gold);
+        color: white;
+      }
+      .btn-gold:hover {
+        background: #cc8c18;
+        transform: translateY(-1px);
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .hamburger span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--ink);
+        border-radius: 2px;
+        transition: all 0.3s;
+      }
+
+      /* ─── HERO ─── */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: calc(var(--nav-h) + 4rem) clamp(1.5rem, 5vw, 4rem) 4rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+      }
+      .hero-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.25;
+      }
+      .blob-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--accent);
+        top: -15%;
+        right: -10%;
+      }
+      .blob-2 {
+        width: 400px;
+        height: 400px;
+        background: var(--teal);
+        bottom: 5%;
+        left: -8%;
+      }
+      .blob-3 {
+        width: 300px;
+        height: 300px;
+        background: var(--gold);
+        top: 30%;
+        left: 35%;
+      }
+
+      /* grid lines bg */
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(91, 58, 245, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(91, 58, 245, 0.05) 1px, transparent 1px);
+        background-size: 64px 64px;
+      }
+
+      .hero-inner {
+        max-width: 880px;
+        text-align: center;
+        animation: fadeUp 0.8s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(28px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--accent-light);
+        color: var(--accent);
+        font-size: 0.8rem;
+        font-weight: 500;
+        padding: 6px 16px;
+        border-radius: var(--r-pill);
+        margin-bottom: 1.8rem;
+        border: 1px solid rgba(91, 58, 245, 0.15);
+        animation: fadeUp 0.8s ease 0.1s both;
+      }
+      .badge-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--accent);
+        border-radius: 50%;
+        animation: blink 1.4s ease infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      .hero h1 {
+        margin-bottom: 1.4rem;
+        animation: fadeUp 0.8s ease 0.2s both;
+      }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--accent);
+        position: relative;
+      }
+      .hero h1 em::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        right: 0;
+        height: 4px;
+        background: var(--gold);
+        border-radius: 2px;
+        transform: skewX(-6deg);
+      }
+
+      .hero-sub {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        color: var(--ink-soft);
+        max-width: 620px;
+        margin: 0 auto 2.4rem;
+        font-weight: 300;
+        animation: fadeUp 0.8s ease 0.3s both;
+      }
+
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        animation: fadeUp 0.8s ease 0.4s both;
+      }
+      .hero-actions .btn {
+        font-size: 1rem;
+        padding: 13px 28px;
+      }
+
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: clamp(1.5rem, 4vw, 3.5rem);
+        margin-top: 4rem;
+        flex-wrap: wrap;
+        animation: fadeUp 0.8s ease 0.5s both;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-num {
+        font-family: "Syne", sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .stat-num span {
+        color: var(--accent);
+      }
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--ink-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-top: 2px;
+      }
+
+      /* ─── WAVE DIVIDER ─── */
+      .wave {
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+        display: block;
+      }
+      .wave svg {
+        display: block;
+        width: 100%;
+      }
+
+      /* ─── SECTION SHARED ─── */
+      section {
+        padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+      }
+
+      .section-label {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--accent);
+        margin-bottom: 0.8rem;
+      }
+      .section-head {
+        margin-bottom: 0.6rem;
+      }
+      .section-sub {
+        color: var(--ink-muted);
+        max-width: 520px;
+        margin-bottom: 3rem;
+        font-size: 1.05rem;
+        font-weight: 300;
+      }
+
+      /* ─── HOW IT WORKS ─── */
+      .how-it-works {
+        background: var(--white);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        counter-reset: steps;
+      }
+      .step {
+        position: relative;
+        padding: 2rem;
+        border-radius: var(--r-lg);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        counter-increment: steps;
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .step:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+      .step::before {
+        content: counter(steps, decimal-leading-zero);
+        font-family: "DM Mono", monospace;
+        font-size: 0.72rem;
+        color: var(--accent);
+        background: var(--accent-light);
+        padding: 3px 9px;
+        border-radius: var(--r-pill);
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
+      .step-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: var(--r);
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+      .step h3 {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      /* connector dots between steps on wide screens */
+      @media (min-width: 900px) {
+        .step:not(:last-child)::after {
+          content: "···";
+          position: absolute;
+          right: -1.6rem;
+          top: 2.5rem;
+          color: var(--accent);
+          letter-spacing: 4px;
+          font-size: 1.1rem;
+        }
+      }
+
+      /* ─── FEATURED COURSES ─── */
+      .courses-section {
+        background: var(--surface);
+      }
+
+      .courses-filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 2.5rem;
+      }
+      .filter-btn {
+        padding: 7px 18px;
+        border-radius: var(--r-pill);
+        border: 1px solid var(--border);
+        background: var(--white);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--ink-soft);
+      }
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .course-card {
+        background: var(--white);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        display: flex;
+        flex-direction: column;
+      }
+      .course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .card-thumb {
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .card-thumb::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.12;
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(255, 255, 255, 0.4) 0,
+          rgba(255, 255, 255, 0.4) 1px,
+          transparent 0,
+          transparent 50%
+        );
+        background-size: 12px 12px;
+      }
+      .card-thumb .badge-type {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: var(--r-pill);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .type-audio {
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--accent);
+      }
+      .type-text {
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--teal);
+      }
+      .type-both {
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--gold);
+      }
+
+      .card-body {
+        padding: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .card-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 0.6rem;
+      }
+      .card-tag {
+        font-size: 0.72rem;
+        padding: 3px 8px;
+        border-radius: var(--r-pill);
+        background: var(--accent-light);
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .card-duration {
+        font-size: 0.78rem;
+        color: var(--ink-muted);
+        margin-left: auto;
+      }
+
+      .card-body h3 {
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+        line-height: 1.3;
+      }
+      .card-body p {
+        font-size: 0.88rem;
+        color: var(--ink-muted);
+        margin-bottom: 1rem;
+        flex: 1;
+        font-weight: 400;
+      }
+
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+      .card-author {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .author-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: white;
+      }
+      .card-author span {
+        font-size: 0.8rem;
+        color: var(--ink-muted);
+      }
+
+      .card-rating {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.82rem;
+        color: var(--gold);
+      }
+      .card-rating span {
+        color: var(--ink-muted);
+      }
+
+      /* ─── AUDIO PLAYER SECTION ─── */
+      .player-section {
+        background: var(--ink);
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+      .player-section::before {
+        content: "";
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        background: var(--accent);
+        border-radius: 50%;
+        top: -40%;
+        right: -20%;
+        opacity: 0.07;
+        filter: blur(60px);
+      }
+
+      .player-section p {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .player-section .section-label {
+        color: var(--teal);
+      }
+      .player-section h2 {
+        color: white;
+      }
+
+      .player-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .player-ui {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--r-lg);
+        padding: 2rem;
+        backdrop-filter: blur(20px);
+      }
+
+      .player-now-playing {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .player-art {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        flex-shrink: 0;
+      }
+      .player-info h4 {
+        font-family: "Syne", sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 3px;
+      }
+      .player-info p {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0;
+      }
+
+      .waveform-wrap {
+        height: 60px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: var(--r-sm);
+        overflow: hidden;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 3px;
+      }
+      .wave-bar {
+        flex: 1;
+        background: rgba(91, 58, 245, 0.35);
+        border-radius: 2px;
+        transition: height 0.3s ease;
+        animation: wave-anim var(--dur) ease-in-out infinite alternate;
+      }
+      @keyframes wave-anim {
+        from {
+          height: var(--h-from);
+        }
+        to {
+          height: var(--h-to);
+        }
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        margin-bottom: 0.5rem;
+        position: relative;
+        cursor: pointer;
+      }
+      .progress-fill {
+        width: 38%;
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+        border-radius: 2px;
+        position: relative;
+      }
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        right: -6px;
+        top: -4px;
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px var(--accent);
+      }
+
+      .progress-times {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-family: "DM Mono", monospace;
+        margin-bottom: 1.5rem;
+      }
+
+      .player-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+      }
+      .ctrl-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.1rem;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+      }
+      .ctrl-btn:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .ctrl-play {
+        width: 52px;
+        height: 52px;
+        background: var(--accent);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        border: none;
+        cursor: pointer;
+      }
+      .ctrl-play:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 24px rgba(91, 58, 245, 0.5);
+      }
+
+      .player-playlist {
+        margin-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        padding-top: 1.2rem;
+      }
+      .playlist-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 9px 10px;
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-bottom: 3px;
+      }
+      .playlist-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .playlist-item.active {
+        background: rgba(91, 58, 245, 0.18);
+      }
+      .playlist-num {
+        width: 18px;
+        font-family: "DM Mono", monospace;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.3);
+        text-align: center;
+      }
+      .playlist-item.active .playlist-num {
+        color: var(--accent);
+      }
+      .playlist-title {
+        flex: 1;
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .playlist-item.active .playlist-title {
+        color: white;
+        font-weight: 500;
+      }
+      .playlist-dur {
+        font-family: "DM Mono", monospace;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* player right side text */
+      .player-text-side h2 {
+        margin-bottom: 1rem;
+      }
+      .player-feature-list {
+        list-style: none;
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: var(--r-sm);
+        background: rgba(255, 255, 255, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+      }
+      .feature-item h4 {
+        font-family: "Syne", sans-serif;
+        font-size: 0.95rem;
+        color: white;
+        margin-bottom: 2px;
+      }
+      .feature-item p {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.45);
+        margin: 0;
+      }
+
+      /* ─── MICRO-LESSONS (TEXT) ─── */
+      .lessons-section {
+        background: var(--surface-alt);
+      }
+
+      .lessons-layout {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 4rem;
+        align-items: start;
+      }
+
+      .lesson-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      .lesson-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.1rem 1.2rem;
+        background: var(--white);
+        border-radius: var(--r);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-bottom: 8px;
+      }
+      .lesson-item:hover,
+      .lesson-item.active {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(91, 58, 245, 0.08);
+      }
+      .lesson-item.active {
+        background: var(--accent-light);
+      }
+
+      .lesson-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--r-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .lesson-info h4 {
+        font-family: "Syne", sans-serif;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+      }
+      .lesson-info p {
+        font-size: 0.8rem;
+        color: var(--ink-muted);
+        margin: 0;
+        font-weight: 400;
+      }
+      .lesson-badge {
+        margin-left: auto;
+        flex-shrink: 0;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: var(--r-pill);
+      }
+      .badge-new {
+        background: var(--teal-light);
+        color: var(--teal);
+      }
+      .badge-popular {
+        background: var(--gold-light);
+        color: var(--gold);
+      }
+      .badge-done {
+        background: var(--accent-light);
+        color: var(--accent);
+      }
+
+      /* micro-lesson card */
+      .micro-card {
+        background: var(--white);
+        border-radius: var(--r-lg);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .micro-card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .micro-card-header-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--r);
+        background: var(--accent-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+      }
+      .micro-card-header h3 {
+        margin-bottom: 4px;
+      }
+      .micro-card-header p {
+        font-size: 0.82rem;
+        color: var(--ink-muted);
+        margin: 0;
+        font-weight: 400;
+      }
+      .micro-card-body {
+        padding: 2rem;
+      }
+      .reading-progress {
+        height: 3px;
+        background: var(--accent);
+        width: 55%;
+        border-radius: 2px;
+        margin-bottom: 1.5rem;
+      }
+
+      .micro-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 1.5rem;
+      }
+      .micro-tag {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        border-radius: var(--r-pill);
+        border: 1px solid var(--border);
+        color: var(--ink-muted);
+      }
+
+      .card-paragraph {
+        font-size: 0.95rem;
+        line-height: 1.8;
+        color: var(--ink-soft);
+        margin-bottom: 1rem;
+        font-weight: 300;
+      }
+      .card-quote {
+        border-left: 3px solid var(--accent);
+        padding-left: 1.2rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+        color: var(--ink-soft);
+        font-size: 1.05rem;
+      }
+      .card-key-points {
+        margin: 1.5rem 0;
+        padding: 1.2rem;
+        background: var(--surface);
+        border-radius: var(--r);
+      }
+      .card-key-points h4 {
+        font-family: "DM Mono", monospace;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+        margin-bottom: 0.8rem;
+        font-weight: 400;
+      }
+      .key-point {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 6px;
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        font-weight: 300;
+      }
+      .key-point::before {
+        content: "▸";
+        color: var(--teal);
+        margin-top: 1px;
+        flex-shrink: 0;
+      }
+
+      .micro-card-footer {
+        padding: 1.2rem 2rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+      }
+      .footer-progress {
+        font-size: 0.8rem;
+        color: var(--ink-muted);
+        font-family: "DM Mono", monospace;
+      }
+      .footer-actions {
+        display: flex;
+        gap: 8px;
+      }
+      .action-btn {
+        padding: 7px 16px;
+        border-radius: var(--r-pill);
+        border: 1px solid var(--border);
+        background: var(--white);
+        font-size: 0.82rem;
+        cursor: pointer;
+        color: var(--ink-soft);
+        font-family: "DM Sans", sans-serif;
+        transition: all 0.2s;
+      }
+      .action-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .action-btn.primary {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+      .action-btn.primary:hover {
+        background: #4829d8;
+      }
+
+      /* ─── CATEGORIES ─── */
+      .categories-section {
+        background: var(--white);
+      }
+
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 1rem;
+      }
+      .category-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 1.5rem 1.2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.25s;
+      }
+      .category-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
+        background: var(--white);
+      }
+      .cat-emoji {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+        display: block;
+      }
+      .cat-name {
+        font-family: "Syne", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .cat-count {
+        font-size: 0.78rem;
+        color: var(--ink-muted);
+      }
+
+      /* ─── TESTIMONIALS ─── */
+      .testimonials-section {
+        background: var(--accent);
+        overflow: hidden;
+        position: relative;
+      }
+      .testimonials-section::before {
+        content: "❝";
+        position: absolute;
+        font-size: 20rem;
+        color: rgba(255, 255, 255, 0.04);
+        font-family: Georgia, serif;
+        top: -4rem;
+        left: 2rem;
+        line-height: 1;
+      }
+      .testimonials-section .section-label {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .testimonials-section h2 {
+        color: white;
+      }
+
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+      .testimonial-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: var(--r-lg);
+        padding: 1.8rem;
+        backdrop-filter: blur(20px);
+        transition: transform 0.25s;
+      }
+      .testimonial-card:hover {
+        transform: translateY(-4px);
+      }
+      .test-stars {
+        color: var(--gold);
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+      }
+      .test-quote {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 1.4rem;
+        font-style: italic;
+      }
+      .test-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .test-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: white;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .test-name {
+        font-family: "Syne", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 2px;
+      }
+      .test-role {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      /* ─── PRICING ─── */
+      .pricing-section {
+        background: var(--surface);
+      }
+      .pricing-toggle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 3rem;
+        font-size: 0.9rem;
+        color: var(--ink-soft);
+      }
+      .toggle-switch {
+        width: 48px;
+        height: 26px;
+        background: var(--accent);
+        border-radius: var(--r-pill);
+        position: relative;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        top: 3px;
+        left: 3px;
+        transition: left 0.2s;
+      }
+      .toggle-switch.annual::after {
+        left: 25px;
+      }
+      .badge-save {
+        background: var(--teal-light);
+        color: var(--teal);
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        border-radius: var(--r-pill);
+        font-weight: 500;
+      }
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+        align-items: end;
+      }
+      .price-card {
+        background: var(--white);
+        border-radius: var(--r-lg);
+        border: 1px solid var(--border);
+        padding: 2rem;
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        position: relative;
+      }
+      .price-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+      .price-card.featured {
+        border-color: var(--accent);
+        border-width: 2px;
+        padding-top: 3rem;
+      }
+      .price-popular-badge {
+        position: absolute;
+        top: -1px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--accent);
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 500;
+        padding: 4px 16px;
+        border-radius: 0 0 var(--r-sm) var(--r-sm);
+        white-space: nowrap;
+      }
+      .price-name {
+        font-family: "DM Mono", monospace;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ink-muted);
+        margin-bottom: 1rem;
+      }
+      .price-amount {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        margin-bottom: 1.5rem;
+      }
+      .price-currency {
+        font-size: 1.2rem;
+        color: var(--ink-soft);
+        font-family: "Syne", sans-serif;
+        margin-top: 8px;
+      }
+      .price-num {
+        font-family: "Syne", sans-serif;
+        font-size: 3rem;
+        font-weight: 800;
+      }
+      .price-period {
+        font-size: 0.85rem;
+        color: var(--ink-muted);
+      }
+      .price-desc {
+        font-size: 0.9rem;
+        color: var(--ink-muted);
+        margin-bottom: 1.5rem;
+        font-weight: 300;
+      }
+      .price-features {
+        list-style: none;
+        margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+      .price-features li {
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .price-features li .check {
+        color: var(--teal);
+        font-size: 1rem;
+      }
+      .price-features li .x {
+        color: rgba(0, 0, 0, 0.2);
+        font-size: 0.9rem;
+      }
+
+      /* ─── CTA BANNER ─── */
+      .cta-section {
+        background: var(--ink);
+        padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 80% 80% at 50% 120%,
+          rgba(91, 58, 245, 0.25) 0%,
+          transparent 70%
+        );
+      }
+      .cta-section h2 {
+        color: white;
+        margin-bottom: 1rem;
+      }
+      .cta-section p {
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 2rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .cta-actions {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      /* ─── FOOTER ─── */
+      footer {
+        background: var(--ink);
+        padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 0.88rem;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+      .footer-brand {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .footer-brand p {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.88rem;
+        max-width: 240px;
+        font-weight: 300;
+      }
+      .footer-socials {
+        display: flex;
+        gap: 12px;
+        margin-top: 0.5rem;
+      }
+      .social-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--r-sm);
+        background: rgba(255, 255, 255, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.5);
+        transition: all 0.2s;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+      .social-btn:hover {
+        background: var(--accent);
+        color: white;
+      }
+
+      .footer-col h5 {
+        font-family: "Syne", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .footer-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .footer-col a {
+        color: rgba(255, 255, 255, 0.4);
+        transition: color 0.2s;
+      }
+      .footer-col a:hover {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        padding-top: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-bottom-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .footer-bottom-links a {
+        color: rgba(255, 255, 255, 0.35);
+        transition: color 0.2s;
+      }
+      .footer-bottom-links a:hover {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      /* ─── MOBILE MENU ─── */
+      .mobile-menu {
+        position: fixed;
+        inset: var(--nav-h) 0 0 0;
+        background: rgba(247, 245, 240, 0.97);
+        backdrop-filter: blur(24px);
+        z-index: 800;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem clamp(1.5rem, 5vw, 2rem);
+        gap: 1.8rem;
+        transform: translateY(-100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+      }
+      .mobile-menu.open {
+        transform: translateY(0);
+        pointer-events: all;
+      }
+      .mobile-menu a {
+        font-size: 1.4rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .mobile-menu a:hover {
+        color: var(--accent);
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 1024px) {
+        .player-layout {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+        .lessons-layout {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-links,
+        .nav-cta .btn-ghost {
+          display: none;
+        }
+        .hamburger {
+          display: flex;
+        }
+        .hero-stats {
+          gap: 2rem;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+        }
+        .footer-bottom-links {
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .hero-actions .btn {
+          justify-content: center;
+        }
+      }
+
+      /* scroll reveal */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-delay-1 {
+        transition-delay: 0.1s;
+      }
+      .reveal-delay-2 {
+        transition-delay: 0.2s;
+      }
+      .reveal-delay-3 {
+        transition-delay: 0.3s;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ─────────── NAV ─────────── -->
+    <nav>
+      <a href="#" class="nav-logo">
+        <div class="logo-mark"></div>
+        <div class="logo-text">Edu<span>Vibe</span></div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#audio">Audio</a></li>
+        <li><a href="#lessons">Lessons</a></li>
+        <li><a href="#categories">Topics</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <div class="nav-cta">
+        <button class="btn btn-ghost">Log in</button>
+        <button class="btn btn-primary">Get started free</button>
+      </div>
+      <div class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </div>
+    </nav>
+
+    <!-- mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#courses" onclick="closeMobile()">Courses</a>
+      <a href="#audio" onclick="closeMobile()">Audio</a>
+      <a href="#lessons" onclick="closeMobile()">Lessons</a>
+      <a href="#categories" onclick="closeMobile()">Topics</a>
+      <a href="#pricing" onclick="closeMobile()">Pricing</a>
+      <button class="btn btn-primary" style="width: fit-content">
+        Get started free →
+      </button>
+    </div>
+
+    <!-- ─────────── HERO ─────────── -->
+    <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-grid"></div>
+        <div class="hero-blob blob-1"></div>
+        <div class="hero-blob blob-2"></div>
+        <div class="hero-blob blob-3"></div>
+      </div>
+      <div class="hero-inner">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          New: AI-curated learning paths just launched
+        </div>
+        <h1>Learn anything in<br /><em>micro-sessions</em></h1>
+        <p class="hero-sub">
+          Audio lessons you can listen to on the go. Bite-sized text modules you
+          can read anywhere. EduVibe fits expert knowledge into your busiest
+          days.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary">Start learning free →</button>
+          <button class="btn btn-ghost">▶ &nbsp;Watch demo</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num">2.4<span>M</span></div>
+            <div class="stat-label">Active Learners</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">18<span>K</span></div>
+            <div class="stat-label">Micro-Lessons</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">4.9<span>★</span></div>
+            <div class="stat-label">Avg Rating</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">94<span>%</span></div>
+            <div class="stat-label">Completion Rate</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── HOW IT WORKS ─────────── -->
+    <section class="how-it-works">
+      <div class="section-label">How EduVibe Works</div>
+      <h2 class="section-head reveal">Three steps to smarter learning</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        No fluff. No hour-long videos. Just the knowledge you need, delivered
+        the way that fits your life.
+      </p>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-icon" style="background: #ede9ff">🎯</div>
+          <h3>Pick your topic</h3>
+          <p>
+            Browse 200+ categories or let our AI suggest a path based on your
+            goals and available time.
+          </p>
+        </div>
+        <div class="step reveal reveal-delay-1">
+          <div class="step-icon" style="background: #d4f7f2">🎧</div>
+          <h3>Choose your format</h3>
+          <p>
+            Audio for commutes & workouts. Text for focused reading sessions.
+            Switch formats anytime mid-course.
+          </p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-icon" style="background: #fff4dc">⚡</div>
+          <h3>Learn in 5–15 min</h3>
+          <p>
+            Each micro-lesson is designed to deliver one clear insight. Fit
+            learning into any gap in your day.
+          </p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-icon" style="background: #fde8ea">📈</div>
+          <h3>Track your growth</h3>
+          <p>
+            Visual progress maps and spaced-repetition reminders make sure
+            knowledge sticks long-term.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── COURSES ─────────── -->
+    <section class="courses-section" id="courses">
+      <div class="section-label">Featured Courses</div>
+      <h2 class="section-head reveal">Handpicked for high-impact learning</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        Every course is reviewed by our editorial team and rated by thousands of
+        real learners.
+      </p>
+
+      <div class="courses-filters reveal reveal-delay-1">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">🎧 Audio</button>
+        <button class="filter-btn">📖 Text</button>
+        <button class="filter-btn">💼 Business</button>
+        <button class="filter-btn">🧠 Psychology</button>
+        <button class="filter-btn">💻 Tech</button>
+        <button class="filter-btn">🌿 Wellness</button>
+      </div>
+
+      <div class="courses-grid">
+        <!-- Card 1 -->
+        <div class="course-card reveal">
+          <div
+            class="card-thumb"
+            style="background: linear-gradient(135deg, #2d1b8e, #5b3af5)"
+          >
+            <span style="position: relative; z-index: 1">🧠</span>
+            <div class="badge-type type-audio">🎧 Audio</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">Psychology</span>
+              <span class="card-duration">⏱ 12 lessons · 58 min</span>
+            </div>
+            <h3>The Science of Habit Formation</h3>
+            <p>
+              Unpack the neural loops behind every habit and learn to rewire
+              them intentionally.
+            </p>
+            <div class="card-footer">
+              <div class="card-author">
+                <div class="author-avatar" style="background: #5b3af5">DR</div>
+                <span>Dr. R. Patel</span>
+              </div>
+              <div class="card-rating">★★★★★ <span>(2.1k)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="course-card reveal reveal-delay-1">
+          <div
+            class="card-thumb"
+            style="background: linear-gradient(135deg, #0e7860, #0eb89a)"
+          >
+            <span style="position: relative; z-index: 1">📊</span>
+            <div class="badge-type type-text">📖 Text</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">Business</span>
+              <span class="card-duration">⏱ 8 lessons · 45 min</span>
+            </div>
+            <h3>Financial Literacy in the Modern Age</h3>
+            <p>
+              From compound interest to crypto basics — everything you should
+              have learned in school.
+            </p>
+            <div class="card-footer">
+              <div class="card-author">
+                <div class="author-avatar" style="background: #0eb89a">ML</div>
+                <span>M. Lowe, CFA</span>
+              </div>
+              <div class="card-rating">★★★★★ <span>(3.4k)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="course-card reveal reveal-delay-2">
+          <div
+            class="card-thumb"
+            style="background: linear-gradient(135deg, #7a3e15, #e8a020)"
+          >
+            <span style="position: relative; z-index: 1">🤖</span>
+            <div class="badge-type type-both">✦ Audio + Text</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">Technology</span>
+              <span class="card-duration">⏱ 15 lessons · 1.5 hrs</span>
+            </div>
+            <h3>AI Fundamentals for Non-Engineers</h3>
+            <p>
+              Demystify machine learning, LLMs, and AI ethics with zero math
+              required.
+            </p>
+            <div class="card-footer">
+              <div class="card-author">
+                <div class="author-avatar" style="background: #e8a020">KA</div>
+                <span>K. Achebe</span>
+              </div>
+              <div class="card-rating">★★★★★ <span>(5.9k)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="course-card reveal">
+          <div
+            class="card-thumb"
+            style="background: linear-gradient(135deg, #8c1a36, #f04e60)"
+          >
+            <span style="position: relative; z-index: 1">🗣️</span>
+            <div class="badge-type type-audio">🎧 Audio</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">Communication</span>
+              <span class="card-duration">⏱ 10 lessons · 65 min</span>
+            </div>
+            <h3>Persuasive Speaking Masterclass</h3>
+            <p>
+              The rhetoric techniques used by the world's most influential
+              communicators.
+            </p>
+            <div class="card-footer">
+              <div class="card-author">
+                <div class="author-avatar" style="background: #f04e60">JO</div>
+                <span>J. Okafor</span>
+              </div>
+              <div class="card-rating">★★★★☆ <span>(1.8k)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="course-card reveal reveal-delay-1">
+          <div
+            class="card-thumb"
+            style="background: linear-gradient(135deg, #134a1e, #3cb34a)"
+          >
+            <span style="position: relative; z-index: 1">🌿</span>
+            <div class="badge-type type-text">📖 Text</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">Wellness</span>
+              <span class="card-duration">⏱ 7 lessons · 32 min</span>
+            </div>
+            <h3>Mindful Productivity Without Burnout</h3>
+            <p>
+              Evidence-based strategies for sustainable high performance in work
+              and life.
+            </p>
+            <div class="card-footer">
+              <div class="card-author">
+                <div class="author-avatar" style="background: #3cb34a">SN</div>
+                <span>Dr. S. Nwachukwu</span>
+              </div>
+              <div class="card-rating">★★★★★ <span>(4.2k)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="course-card reveal reveal-delay-2">
+          <div
+            class="card-thumb"
+            style="background: linear-gradient(135deg, #1a1260, #4b3bbf)"
+          >
+            <span style="position: relative; z-index: 1">🎸</span>
+            <div class="badge-type type-both">✦ Audio + Text</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">Creativity</span>
+              <span class="card-duration">⏱ 9 lessons · 50 min</span>
+            </div>
+            <h3>Music Theory for Complete Beginners</h3>
+            <p>
+              From notes to chord progressions — learn the language of music
+              step by step.
+            </p>
+            <div class="card-footer">
+              <div class="card-author">
+                <div class="author-avatar" style="background: #4b3bbf">TI</div>
+                <span>T. Ibrahim</span>
+              </div>
+              <div class="card-rating">★★★★★ <span>(987)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── AUDIO PLAYER ─────────── -->
+    <section class="player-section" id="audio">
+      <div class="player-layout">
+        <!-- LEFT: player UI -->
+        <div>
+          <div class="player-ui reveal">
+            <div class="player-now-playing">
+              <div
+                class="player-art"
+                style="background: linear-gradient(135deg, #2d1b8e, #5b3af5)"
+              >
+                🧠
+              </div>
+              <div class="player-info">
+                <h4>Lesson 3: The Reward Loop</h4>
+                <p>The Science of Habit Formation · Dr. R. Patel</p>
+              </div>
+            </div>
+
+            <!-- Waveform -->
+            <div class="waveform-wrap" id="waveform"></div>
+
+            <!-- Progress -->
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-times">
+              <span id="curTime">4:22</span>
+              <span>11:30</span>
+            </div>
+
+            <!-- Controls -->
+            <div class="player-controls">
+              <button class="ctrl-btn" title="Rewind 15s">⟪</button>
+              <button class="ctrl-btn" title="Previous">⏮</button>
+              <button class="ctrl-play" id="playBtn" title="Play/Pause">
+                ▶
+              </button>
+              <button class="ctrl-btn" title="Next">⏭</button>
+              <button class="ctrl-btn" title="Forward 15s">⟫</button>
+            </div>
+
+            <!-- Playlist -->
+            <div class="player-playlist">
+              <div class="playlist-item active">
+                <span class="playlist-num">▶</span>
+                <span class="playlist-title">Lesson 3: The Reward Loop</span>
+                <span class="playlist-dur">11:30</span>
+              </div>
+              <div class="playlist-item">
+                <span class="playlist-num">4</span>
+                <span class="playlist-title">Lesson 4: Keystone Habits</span>
+                <span class="playlist-dur">9:15</span>
+              </div>
+              <div class="playlist-item">
+                <span class="playlist-num">5</span>
+                <span class="playlist-title">Lesson 5: Environment Design</span>
+                <span class="playlist-dur">13:05</span>
+              </div>
+              <div class="playlist-item">
+                <span class="playlist-num">6</span>
+                <span class="playlist-title"
+                  >Lesson 6: Identity-Based Habits</span
+                >
+                <span class="playlist-dur">10:48</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: feature text -->
+        <div class="player-text-side">
+          <span class="section-label">Audio Learning</span>
+          <h2 class="reveal">Your ears are your<br />secret learning tool</h2>
+          <p
+            class="reveal reveal-delay-1"
+            style="
+              color: rgba(255, 255, 255, 0.55);
+              font-size: 1.05rem;
+              max-width: 440px;
+              margin-bottom: 0;
+            "
+          >
+            Every audio lesson is professionally narrated, structured like a
+            conversation, and packed with memorable examples — not dry lectures.
+          </p>
+          <ul class="player-feature-list">
+            <li class="feature-item reveal">
+              <div class="feature-icon">🎙️</div>
+              <div>
+                <h4>Studio-quality narration</h4>
+                <p>
+                  Recorded by expert instructors and audio professionals in
+                  purpose-built studios.
+                </p>
+              </div>
+            </li>
+            <li class="feature-item reveal reveal-delay-1">
+              <div class="feature-icon">📱</div>
+              <div>
+                <h4>Offline-first mobile app</h4>
+                <p>
+                  Download lessons for flights, commutes, and anywhere
+                  connectivity is spotty.
+                </p>
+              </div>
+            </li>
+            <li class="feature-item reveal reveal-delay-2">
+              <div class="feature-icon">🔊</div>
+              <div>
+                <h4>Variable speed & bookmarks</h4>
+                <p>
+                  Speed up to 2×, slow down for complex topics, and bookmark key
+                  moments.
+                </p>
+              </div>
+            </li>
+            <li class="feature-item reveal reveal-delay-3">
+              <div class="feature-icon">📝</div>
+              <div>
+                <h4>AI-generated transcripts</h4>
+                <p>
+                  Every audio lesson includes a searchable, highlight-able full
+                  transcript.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── MICRO-LESSONS ─────────── -->
+    <section class="lessons-section" id="lessons">
+      <div class="section-label">Text Micro-Lessons</div>
+      <h2 class="section-head reveal">Read it in one coffee break</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        Each text lesson is a self-contained deep dive — dense with insight,
+        light on filler.
+      </p>
+
+      <div class="lessons-layout">
+        <!-- Left: list -->
+        <div class="lesson-list">
+          <div class="lesson-item active reveal">
+            <div class="lesson-icon" style="background: #ede9ff">🧬</div>
+            <div class="lesson-info">
+              <h4>How Memory Actually Works</h4>
+              <p>Neuroscience · 6 min read</p>
+            </div>
+            <span class="lesson-badge badge-popular">🔥 Popular</span>
+          </div>
+          <div class="lesson-item reveal reveal-delay-1">
+            <div class="lesson-icon" style="background: #d4f7f2">💸</div>
+            <div class="lesson-info">
+              <h4>The 50/30/20 Budget Rule</h4>
+              <p>Personal Finance · 4 min read</p>
+            </div>
+            <span class="lesson-badge badge-new">✦ New</span>
+          </div>
+          <div class="lesson-item reveal reveal-delay-2">
+            <div class="lesson-icon" style="background: #fff4dc">🤝</div>
+            <div class="lesson-info">
+              <h4>Negotiation Tactics That Work</h4>
+              <p>Career · 8 min read</p>
+            </div>
+            <span class="lesson-badge badge-done">✓ Done</span>
+          </div>
+          <div class="lesson-item reveal reveal-delay-3">
+            <div class="lesson-icon" style="background: #fde8ea">🌍</div>
+            <div class="lesson-info">
+              <h4>Climate Science Explained Clearly</h4>
+              <p>Science · 7 min read</p>
+            </div>
+          </div>
+          <div class="lesson-item reveal">
+            <div class="lesson-icon" style="background: #ede9ff">⚖️</div>
+            <div class="lesson-info">
+              <h4>Cognitive Biases Cheat Sheet</h4>
+              <p>Psychology · 10 min read</p>
+            </div>
+            <span class="lesson-badge badge-popular">🔥 Popular</span>
+          </div>
+        </div>
+
+        <!-- Right: micro-card preview -->
+        <div class="micro-card reveal">
+          <div class="micro-card-header">
+            <div class="micro-card-header-icon">🧬</div>
+            <div>
+              <h3>How Memory Actually Works</h3>
+              <p>Neuroscience · 6 min read · 94% completion rate</p>
+            </div>
+          </div>
+          <div class="micro-card-body">
+            <div class="reading-progress"></div>
+            <div class="micro-tags">
+              <span class="micro-tag">Neuroscience</span>
+              <span class="micro-tag">Learning</span>
+              <span class="micro-tag">Brain</span>
+              <span class="micro-tag">Memory</span>
+            </div>
+            <p class="card-paragraph">
+              Memory is not a filing cabinet. It's a reconstruction — an active
+              process of reassembling information every single time you recall
+              it. Understanding this changes how you study, communicate, and
+              even how you trust your own recollections.
+            </p>
+            <blockquote class="card-quote">
+              "Every time you remember something, you're editing the original
+              memory — and saving a slightly different version."
+            </blockquote>
+            <p class="card-paragraph">
+              Your brain has multiple memory systems. The hippocampus encodes
+              new experiences, but long-term storage is distributed across the
+              cortex. This is why emotionally charged memories feel so vivid —
+              the amygdala strengthens encoding in proportion to emotional
+              intensity.
+            </p>
+            <div class="card-key-points">
+              <h4>Key takeaways</h4>
+              <div class="key-point">
+                Memories are reconstructive, not reproductive — retrieval
+                changes them.
+              </div>
+              <div class="key-point">
+                Sleep is when short-term memories consolidate into long-term
+                storage.
+              </div>
+              <div class="key-point">
+                Spaced repetition exploits the forgetting curve to maximize
+                retention.
+              </div>
+              <div class="key-point">
+                Context-dependent memory: you recall better in the environment
+                you learned in.
+              </div>
+            </div>
+          </div>
+          <div class="micro-card-footer">
+            <span class="footer-progress">55% through · 3 min remaining</span>
+            <div class="footer-actions">
+              <button class="action-btn">🔖 Save</button>
+              <button class="action-btn">🎧 Switch to audio</button>
+              <button class="action-btn primary">Continue →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── CATEGORIES ─────────── -->
+    <section class="categories-section" id="categories">
+      <div class="section-label">Browse Topics</div>
+      <h2 class="section-head reveal">200+ categories. One platform.</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        From ancient philosophy to Web3 — if it's worth knowing, we've got a
+        micro-lesson for it.
+      </p>
+
+      <div class="categories-grid">
+        <div class="category-card reveal">
+          <span class="cat-emoji">💼</span>
+          <div class="cat-name">Business</div>
+          <div class="cat-count">1,240 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-1">
+          <span class="cat-emoji">💻</span>
+          <div class="cat-name">Technology</div>
+          <div class="cat-count">980 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-2">
+          <span class="cat-emoji">🧠</span>
+          <div class="cat-name">Psychology</div>
+          <div class="cat-count">760 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-3">
+          <span class="cat-emoji">📈</span>
+          <div class="cat-name">Finance</div>
+          <div class="cat-count">640 lessons</div>
+        </div>
+        <div class="category-card reveal">
+          <span class="cat-emoji">🌿</span>
+          <div class="cat-name">Wellness</div>
+          <div class="cat-count">520 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-1">
+          <span class="cat-emoji">🎨</span>
+          <div class="cat-name">Creativity</div>
+          <div class="cat-count">490 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-2">
+          <span class="cat-emoji">🌍</span>
+          <div class="cat-name">History</div>
+          <div class="cat-count">870 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-3">
+          <span class="cat-emoji">🔬</span>
+          <div class="cat-name">Science</div>
+          <div class="cat-count">1,100 lessons</div>
+        </div>
+        <div class="category-card reveal">
+          <span class="cat-emoji">📚</span>
+          <div class="cat-name">Philosophy</div>
+          <div class="cat-count">340 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-1">
+          <span class="cat-emoji">🗣️</span>
+          <div class="cat-name">Languages</div>
+          <div class="cat-count">280 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-2">
+          <span class="cat-emoji">⚖️</span>
+          <div class="cat-name">Law & Ethics</div>
+          <div class="cat-count">310 lessons</div>
+        </div>
+        <div class="category-card reveal reveal-delay-3">
+          <span class="cat-emoji">🎵</span>
+          <div class="cat-name">Music</div>
+          <div class="cat-count">200 lessons</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── TESTIMONIALS ─────────── -->
+    <section class="testimonials-section">
+      <div class="section-label">What Learners Say</div>
+      <h2 class="section-head reveal" style="color: white; margin-bottom: 3rem">
+        Trusted by 2.4 million curious minds
+      </h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal">
+          <div class="test-stars">★★★★★</div>
+          <p class="test-quote">
+            I've tried every learning app out there. EduVibe is the first one I
+            actually use daily. The audio format is perfect for my 40-minute
+            commute.
+          </p>
+          <div class="test-author">
+            <div class="test-avatar">AO</div>
+            <div>
+              <div class="test-name">Adaeze Okonkwo</div>
+              <div class="test-role">Product Manager, Lagos</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-1">
+          <div class="test-stars">★★★★★</div>
+          <p class="test-quote">
+            The micro-lesson format finally makes "learning something new every
+            day" actually achievable. I completed 3 courses in a month without
+            it feeling like work.
+          </p>
+          <div class="test-author">
+            <div class="test-avatar">KM</div>
+            <div>
+              <div class="test-name">Kwame Mensah</div>
+              <div class="test-role">Software Engineer, Accra</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-2">
+          <div class="test-stars">★★★★★</div>
+          <p class="test-quote">
+            As a busy mother of three, I thought my days of self-improvement
+            were over. EduVibe proved me wrong — 10 minutes here and there
+            actually adds up.
+          </p>
+          <div class="test-author">
+            <div class="test-avatar">FD</div>
+            <div>
+              <div class="test-name">Fatima Diallo</div>
+              <div class="test-role">Entrepreneur, Dakar</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-3">
+          <div class="test-stars">★★★★★</div>
+          <p class="test-quote">
+            The content quality is insane. These aren't watered-down summaries —
+            they're genuine deep dives that just happen to be perfectly concise.
+          </p>
+          <div class="test-author">
+            <div class="test-avatar">ZR</div>
+            <div>
+              <div class="test-name">Zara Rahman</div>
+              <div class="test-role">PhD Student, Nairobi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PRICING ─────────── -->
+    <section class="pricing-section" id="pricing">
+      <div class="section-label">Simple Pricing</div>
+      <h2 class="section-head reveal">Invest in yourself</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        No surprise fees. Cancel anytime. Full access from day one.
+      </p>
+
+      <div class="pricing-toggle reveal">
+        <span>Monthly</span>
+        <div class="toggle-switch annual" id="pricingToggle"></div>
+        <span>Annual <span class="badge-save">Save 40%</span></span>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free -->
+        <div class="price-card reveal">
+          <div class="price-name">Free Forever</div>
+          <div class="price-amount">
+            <span class="price-currency">$</span>
+            <span class="price-num">0</span>
+          </div>
+          <p class="price-desc">Dip your toes in with no commitment.</p>
+          <ul class="price-features">
+            <li><span class="check">✓</span> 5 lessons per month</li>
+            <li><span class="check">✓</span> Audio & text formats</li>
+            <li><span class="check">✓</span> Basic progress tracking</li>
+            <li><span class="x">×</span> Offline downloads</li>
+            <li><span class="x">×</span> AI learning paths</li>
+            <li><span class="x">×</span> Course certificates</li>
+          </ul>
+          <button
+            class="btn btn-ghost"
+            style="width: 100%; justify-content: center"
+          >
+            Start for free
+          </button>
+        </div>
+
+        <!-- Pro -->
+        <div class="price-card featured reveal reveal-delay-1">
+          <div class="price-popular-badge">Most Popular</div>
+          <div class="price-name">Pro</div>
+          <div class="price-amount">
+            <span class="price-currency">$</span>
+            <span class="price-num" id="proPrice">9</span>
+            <span class="price-period">/mo</span>
+          </div>
+          <p class="price-desc">
+            The complete EduVibe experience for serious learners.
+          </p>
+          <ul class="price-features">
+            <li><span class="check">✓</span> Unlimited lessons</li>
+            <li><span class="check">✓</span> Audio & text formats</li>
+            <li><span class="check">✓</span> Full progress tracking</li>
+            <li><span class="check">✓</span> Offline downloads</li>
+            <li><span class="check">✓</span> AI learning paths</li>
+            <li><span class="check">✓</span> Course certificates</li>
+          </ul>
+          <button
+            class="btn btn-primary"
+            style="width: 100%; justify-content: center"
+          >
+            Get Pro →
+          </button>
+        </div>
+
+        <!-- Teams -->
+        <div class="price-card reveal reveal-delay-2">
+          <div class="price-name">Teams</div>
+          <div class="price-amount">
+            <span class="price-currency">$</span>
+            <span class="price-num" id="teamPrice">7</span>
+            <span class="price-period">/seat/mo</span>
+          </div>
+          <p class="price-desc">Upskill your entire organization, together.</p>
+          <ul class="price-features">
+            <li><span class="check">✓</span> Everything in Pro</li>
+            <li><span class="check">✓</span> Admin dashboard</li>
+            <li><span class="check">✓</span> Team leaderboards</li>
+            <li><span class="check">✓</span> Custom learning paths</li>
+            <li><span class="check">✓</span> Priority support</li>
+            <li><span class="check">✓</span> SSO & SCIM</li>
+          </ul>
+          <button
+            class="btn btn-ghost"
+            style="width: 100%; justify-content: center"
+          >
+            Contact sales
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── CTA ─────────── -->
+    <section class="cta-section">
+      <h2 class="reveal">Ready to reclaim your curiosity?</h2>
+      <p class="reveal reveal-delay-1">
+        Join 2.4 million learners already growing with EduVibe. Your first 5
+        lessons are completely free — no credit card required.
+      </p>
+      <div class="cta-actions reveal reveal-delay-2">
+        <button
+          class="btn btn-primary"
+          style="font-size: 1rem; padding: 14px 32px"
+        >
+          Start learning today →
+        </button>
+        <button
+          class="btn btn-ghost"
+          style="
+            color: rgba(255, 255, 255, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+            font-size: 1rem;
+            padding: 14px 32px;
+          "
+        >
+          Browse all courses
+        </button>
+      </div>
+    </section>
+
+    <!-- ─────────── FOOTER ─────────── -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div
+            class="nav-logo"
+            style="display: flex; align-items: center; gap: 10px"
+          >
+            <div class="logo-mark"></div>
+            <div class="logo-text" style="color: rgba(255, 255, 255, 0.8)">
+              Edu<span>Vibe</span>
+            </div>
+          </div>
+          <p>
+            Audio & Text Micro-Learning Hub. Expert knowledge in bite-sized
+            lessons for curious, busy people everywhere.
+          </p>
+          <div class="footer-socials">
+            <div class="social-btn">𝕏</div>
+            <div class="social-btn">in</div>
+            <div class="social-btn">▶</div>
+            <div class="social-btn">ig</div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="#">Browse Courses</a></li>
+            <li><a href="#">Audio Library</a></li>
+            <li><a href="#">Text Lessons</a></li>
+            <li><a href="#">Learning Paths</a></li>
+            <li><a href="#">Certificates</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Kit</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Support</h5>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Community</a></li>
+            <li><a href="#">Teach on EduVibe</a></li>
+            <li><a href="#">Affiliates</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 EduVibe Inc. All rights reserved.</span>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Settings</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ─── Waveform generator ───
+      const waveform = document.getElementById("waveform");
+      for (let i = 0; i < 48; i++) {
+        const bar = document.createElement("div");
+        bar.className = "wave-bar";
+        const h1 = Math.floor(Math.random() * 36) + 6;
+        const h2 = Math.floor(Math.random() * 36) + 6;
+        const dur = (0.6 + Math.random() * 1.2).toFixed(2);
+        bar.style.cssText = `--h-from:${h1}px; --h-to:${h2}px; --dur:${dur}s; height:${h1}px;`;
+        if (i < 18) bar.style.background = "rgba(91,58,245,0.7)";
+        waveform.appendChild(bar);
+      }
+
+      // ─── Play button toggle ───
+      let playing = false;
+      const playBtn = document.getElementById("playBtn");
+      playBtn.addEventListener("click", () => {
+        playing = !playing;
+        playBtn.textContent = playing ? "⏸" : "▶";
+        playBtn.style.background = playing ? "#0eb89a" : "#5b3af5";
+        document.querySelectorAll(".wave-bar").forEach((b) => {
+          b.style.animationPlayState = playing ? "running" : "paused";
+        });
+      });
+      document
+        .querySelectorAll(".wave-bar")
+        .forEach((b) => (b.style.animationPlayState = "paused"));
+
+      // ─── Progress bar click ───
+      const pb = document.querySelector(".progress-bar");
+      const pf = document.getElementById("progressFill");
+      const ct = document.getElementById("curTime");
+      pb.addEventListener("click", (e) => {
+        const pct = e.offsetX / pb.offsetWidth;
+        pf.style.width = pct * 100 + "%";
+        const secs = Math.round(pct * 690);
+        ct.textContent =
+          Math.floor(secs / 60) + ":" + String(secs % 60).padStart(2, "0");
+      });
+
+      // ─── Course filter buttons ───
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+
+      // ─── Lesson item click ───
+      document.querySelectorAll(".lesson-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          document
+            .querySelectorAll(".lesson-item")
+            .forEach((i) => i.classList.remove("active"));
+          item.classList.add("active");
+        });
+      });
+
+      // ─── Playlist click ───
+      document.querySelectorAll(".playlist-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          document
+            .querySelectorAll(".playlist-item")
+            .forEach((i) => i.classList.remove("active"));
+          item.classList.add("active");
+        });
+      });
+
+      // ─── Pricing toggle ───
+      const toggle = document.getElementById("pricingToggle");
+      const proPrice = document.getElementById("proPrice");
+      const teamPrice = document.getElementById("teamPrice");
+      let annual = true;
+      toggle.addEventListener("click", () => {
+        annual = !annual;
+        toggle.classList.toggle("annual", annual);
+        proPrice.textContent = annual ? "9" : "15";
+        teamPrice.textContent = annual ? "7" : "12";
+      });
+
+      // ─── Hamburger / mobile menu ───
+      const ham = document.getElementById("hamburger");
+      const menu = document.getElementById("mobileMenu");
+      ham.addEventListener("click", () => {
+        menu.classList.toggle("open");
+      });
+      function closeMobile() {
+        menu.classList.remove("open");
+      }
+
+      // ─── Scroll reveal ───
+      const revealEls = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 },
+      );
+      revealEls.forEach((el) => io.observe(el));
+
+      // ─── Smooth filter animation ───
+      document.querySelectorAll(".course-card").forEach((c, i) => {
+        c.style.transitionDelay = i * 0.05 + "s";
+      });
+    </script>
+  </body>
+</html>
